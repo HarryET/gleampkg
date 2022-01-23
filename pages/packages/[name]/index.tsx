@@ -124,13 +124,55 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                             </div>
                             <p className="mt-2">{pkg.description}</p>
                         </div>
-                        
+
                     </header>
                 </div>
 
                 <main className="-mt-32">
                     <div className="max-w-7xl mx-auto pb-12 px-4 sm:px-6 lg:px-8">
                         <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
+                            <div className="w-full flex flex-row items-start justify-between">
+                                <div className="w-2/3">
+                                    <div className="flex flex-col">
+                                        <div className="w-full flex flex-row">
+                                            <div className="w-full min-h-[8rem]">
+                                                {/* Links */}
+                                                <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Links</h3>
+                                                <div className="flex flex-col space-y-2">
+                                                    {Object.keys(pkg.links).map((key) => <>
+                                                        <div className="flex flex-row" key={key}>
+                                                            <a className="text-[#99498d] underline font-bold" href={pkg.links[key]}>{key}</a>
+                                                        </div>
+                                                    </>)}
+                                                </div>
+                                            </div>
+                                            <div className="w-full min-h-[8rem]">
+                                                {/* Licenses */}
+                                                <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Licenses</h3>
+                                                <div className="flex flex-col space-y-2">
+                                                    {pkg.licenses.map((license) => <>
+                                                        <div className="flex flex-row" key={license}>
+                                                            <p>{license}</p>
+                                                        </div>
+                                                    </>)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="w-full flex flex-row">
+                                            <div className="w-full min-h-[6rem]">
+                                                {/* BLANK */}
+                                            </div>
+                                            <div className="w-full min-h-[6rem]">
+                                                {/* BLANK */}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="w-1/3">
+
+                                </div>
+                            </div>
+
                             <div className="w-full flex flex-row items-start justify-between">
                                 <div className="w-full">
                                     <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Releases <span className='text-sm text-gray-400'>({pkg.releases.length})</span></h3>
