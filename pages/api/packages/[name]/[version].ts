@@ -1,6 +1,6 @@
 import Axios, { AxiosError } from "axios";
 import { NextApiHandler } from "next";
-import redis, { PACKAGE_TTL, RELEASE_TTL } from "../../../../../lib/redis";
+import redis, { PACKAGE_TTL, RELEASE_TTL } from "../../../../lib/redis";
 import { HexPackageVersion, HexRequirement, PackageVersion, Publisher, Requirement } from "@gleampkg/releases";
 
 const toGleamRequirements = (reqs: { [key: string]: HexRequirement }): Requirement[] => {

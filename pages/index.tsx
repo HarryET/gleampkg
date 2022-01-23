@@ -21,6 +21,11 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 const index: NextPage = ({ cached_valid_packages, cached_versions }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const stats = [
+    {name: "Cached Packages", stat: cached_valid_packages},
+    {name: "Cached Package Versions", stat: cached_versions}
+  ];
+
   return (
     <>
       <Head>
@@ -33,13 +38,15 @@ const index: NextPage = ({ cached_valid_packages, cached_versions }: InferGetSer
           <code>https://gleampkg.com/api/packages/:name</code>
           <code>https://gleampkg.com/api/packages/:name/:version</code>
         </div>
-        <div className={"flex flex-row space-x-4 mt-4 items-center justify-center"}>
-          <div>
-            <p>Currently cached <span className="font-bold text-pink-400">{cached_versions}</span> releases</p>
-          </div>
-          <div>
-            <p>Currently knows <span className="font-bold text-pink-400">{cached_valid_packages}</span> packages</p>
-          </div>
+        <div className="mt-4">
+          <dl className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {stats.map((item) => (
+              <div key={item.name} className="px-4 py-5 bg-white shadow rounded-lg overflow-hidden sm:p-6">
+                <dt className="text-sm font-medium text-gray-500 truncate">{item.name}</dt>
+                <dd className="mt-1 text-3xl font-semibold text-gray-900">{item.stat}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
         <div className="mt-4 text-gray-400">
           Built from <a className="text-pink-400 underline" href={`https://github.com/HarryET/gleampkg/commit/${sha}`}>{sha}</a>
