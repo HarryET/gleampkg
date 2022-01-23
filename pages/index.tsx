@@ -1,5 +1,7 @@
 import { NextPage } from "next"
 
+const sha = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA;
+
 const index: NextPage = () => {
   return (
     <div className={"w-full h-full flex flex-col items-center justify-center"}>
@@ -8,6 +10,9 @@ const index: NextPage = () => {
       <div className={"flex flex-col items-center justify-center mt-4"}>
         <code>https://gleampkg.com/api/packages/:name</code>
         <code>https://gleampkg.com/api/packages/:name/:version</code>
+      </div>
+      <div className="mt-4 text-gray-400">
+        Built from <a className="text-pink-400 underline" href={`https://github.com/HarryET/gleampkg/commit/${sha}`}>{sha}</a>
       </div>
     </div>
   )
