@@ -117,10 +117,14 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                         </div>
                     </nav>
                     <header className="py-10">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-row items-end">
-                            <h1 className="text-3xl font-bold text-gray-800">{pkg.name}</h1>
-                            <h2 className="ml-2 text-gray-700">{pkg.latest_stable_version}</h2>
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col">
+                            <div className="flex flex-row items-end">
+                                <h1 className="text-3xl font-bold text-gray-800">{pkg.name}</h1>
+                                <h2 className="ml-2 text-gray-700">{pkg.latest_stable_version}</h2>
+                            </div>
+                            <p className="mt-2">{pkg.description}</p>
                         </div>
+                        
                     </header>
                 </div>
 
