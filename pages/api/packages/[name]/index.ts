@@ -1,6 +1,7 @@
 import { NextApiHandler } from "next";
 import Axios, { AxiosError } from "axios";
 import { Author, GleamPackage, HexAuthor, HexPackage, HexRelease, Release } from "./types";
+import redis from "../../../../lib/redis";
 
 const toGleamOwners = (authors: HexAuthor[]): Author[] => {
     return authors.map(author => {
@@ -43,6 +44,30 @@ const getPackage: NextApiHandler = async (req, res) => {
         [key: string]: string
     };
 
+    await redis.connect();
+
+    const exists = await redis.exists(`packages:cache:${name}`);
+    if (exists >= 1) {
+        const pkg = await redis.json.get(`packages:cache:${name}`);
+
+        res.status(200).json(pkg);
+
+        await redis.disconnect();
+        return;
+    }
+
+    const valid = (await redis.get(`packages:valid:${name}`)) ?? "1";
+    if (valid == "0") {
+        res.status(400).json({
+            code: 400,
+            message: "Not a Gleam package, use Hex",
+            url: `https://hex.pm/packages/${name}`
+        });
+
+        await redis.disconnect();
+        return;
+    }
+
     try {
         const pkg = await Axios.get<HexPackage>(`https://hex.pm/api/packages/${name}`)
 
@@ -57,6 +82,11 @@ const getPackage: NextApiHandler = async (req, res) => {
                     message: "Not a Gleam package, use Hex",
                     url: `https://hex.pm/packages/${name}`
                 })
+
+                await redis.set(`packages:valid:${name}`, 0, {
+                    EX: 15 * 60
+                });
+                await redis.disconnect();
                 return;
             }
         } catch (err) {
@@ -66,6 +96,7 @@ const getPackage: NextApiHandler = async (req, res) => {
                     message: "Not Found",
                     package: name
                 })
+                await redis.disconnect();
                 return;
             }
     
@@ -74,6 +105,13 @@ const getPackage: NextApiHandler = async (req, res) => {
                 message: err.toString()
             })
         }
+
+        await redis.set(`packages:valid:${name}`, 1, {
+            EX: 15 * 60
+        })
+        await redis.json.set(`packages:cache:${name}`, '$', gleam_pkg);
+        await redis.expire(`packages:cache:${name}`, 15 * 60)
+        await redis.disconnect();
 
         res.status(200).json(gleam_pkg);
     } catch (err) {
@@ -90,6 +128,8 @@ const getPackage: NextApiHandler = async (req, res) => {
             code: 500,
             message: err.toString()
         })
+
+        await redis.disconnect();
     }
 }
 
