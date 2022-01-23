@@ -6,6 +6,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^1.4.3",
+    "@heroicons/react": "^1.0.5",
     "@node-redis/json": "^1.0.2",
     "@node-redis/search": "^1.0.2",
     "autoprefixer": "^10.4.2",
