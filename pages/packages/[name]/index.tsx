@@ -165,9 +165,9 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                                                             <div className="flex items-center justify-between">
                                                                 <p className="text-sm font-medium text-[#99498d] truncate">{dependency.name}</p>
                                                                 <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
-                                                                    <p>
+                                                                    <code>
                                                                         {dependency.version}
-                                                                    </p>
+                                                                    </code>
                                                                 </div>
                                                             </div>
                                                         </div>
