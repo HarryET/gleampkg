@@ -1,7 +1,7 @@
 import { NextApiHandler } from "next";
 import Axios, { AxiosError } from "axios";
 import { Author, GleamPackage, HexAuthor, HexPackage, HexRelease, Release } from "./types";
-import redis from "../../../../lib/redis";
+import redis, { TTL } from "../../../../lib/redis";
 
 const toGleamOwners = (authors: HexAuthor[]): Author[] => {
     return authors.map(author => {
@@ -84,7 +84,7 @@ const getPackage: NextApiHandler = async (req, res) => {
                 })
 
                 await redis.set(`packages:valid:${name}`, 0, {
-                    EX: 15 * 60
+                    EX: TTL
                 });
                 await redis.disconnect();
                 return;
@@ -107,10 +107,10 @@ const getPackage: NextApiHandler = async (req, res) => {
         }
 
         await redis.set(`packages:valid:${name}`, 1, {
-            EX: 15 * 60
+            EX: TTL
         })
         await redis.json.set(`packages:cache:${name}`, '$', gleam_pkg);
-        await redis.expire(`packages:cache:${name}`, 15 * 60)
+        await redis.expire(`packages:cache:${name}`, TTL)
         await redis.disconnect();
 
         res.status(200).json(gleam_pkg);
