@@ -1,6 +1,6 @@
 import Axios, { AxiosError } from "axios";
 import { NextApiHandler } from "next";
-import redis, { RELEASE_TTL } from "../../../../../lib/redis";
+import redis, { PACKAGE_TTL, RELEASE_TTL } from "../../../../../lib/redis";
 import { HexPackageVersion, HexRequirement, PackageVersion, Publisher, Requirement } from "./types";
 
 const toGleamRequirements = (reqs: { [key: string]: HexRequirement }): Requirement[] => {
@@ -58,6 +58,16 @@ const getPackageVersion: NextApiHandler = async (req, res) => {
         return;
     }
 
+    const exists = await redis.exists(`releases:${name}:${version}`);
+    if (exists >= 1) {
+        const pkg = await redis.json.get(`releases:${name}:${version}`);
+
+        res.status(200).json(pkg);
+
+        await redis.disconnect();
+        return;
+    }
+
     try {
         const pkg = await Axios.get<HexPackageVersion>(`https://hex.pm/api/packages/${name}/releases/${version}`)
 
@@ -67,11 +77,19 @@ const getPackageVersion: NextApiHandler = async (req, res) => {
                 message: "Not a Gleam package, use Hex",
                 url: `https://hex.pm/packages/${name}`
             })
+
+            await redis.set(`packages:valid:${name}`, 0, {
+                EX: PACKAGE_TTL
+            })
+
             return;
         }
 
         const release = toGleamRelease(name, pkg.data);
 
+        await redis.set(`packages:valid:${name}`, 1, {
+            EX: PACKAGE_TTL
+        })
         await redis.json.set(`releases:${name}:${version}`, '$', release);
         await redis.expire(`releases:${name}:${version}`, RELEASE_TTL);
         await redis.disconnect();

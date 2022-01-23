@@ -46,16 +46,6 @@ const getPackage: NextApiHandler = async (req, res) => {
 
     await redis.connect();
 
-    const exists = await redis.exists(`packages:cache:${name}`);
-    if (exists >= 1) {
-        const pkg = await redis.json.get(`packages:cache:${name}`);
-
-        res.status(200).json(pkg);
-
-        await redis.disconnect();
-        return;
-    }
-
     const valid = (await redis.get(`packages:valid:${name}`)) ?? "1";
     if (valid == "0") {
         res.status(400).json({
@@ -63,6 +53,16 @@ const getPackage: NextApiHandler = async (req, res) => {
             message: "Not a Gleam package, use Hex",
             url: `https://hex.pm/packages/${name}`
         });
+
+        await redis.disconnect();
+        return;
+    }
+
+    const exists = await redis.exists(`packages:cache:${name}`);
+    if (exists >= 1) {
+        const pkg = await redis.json.get(`packages:cache:${name}`);
+
+        res.status(200).json(pkg);
 
         await redis.disconnect();
         return;
