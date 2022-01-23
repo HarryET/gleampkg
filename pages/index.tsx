@@ -49,7 +49,7 @@ const index: NextPage = ({ cached_valid_packages, cached_versions }: InferGetSer
           </dl>
         </div>
         <div className="mt-4 text-gray-400">
-          Built from <a className="bg-[#ffaff3] underline" href={`https://github.com/HarryET/gleampkg/commit/${sha}`}>{sha}</a>
+          Built from <a className="text-[#ffaff3] underline" href={`https://github.com/HarryET/gleampkg/commit/${sha}`}>{sha}</a>
         </div>
       </div>
     </>

@@ -85,11 +85,13 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                             <div className="relative h-16 flex items-center justify-between lg:border-b lg:border-[#99498d] lg:border-opacity-25">
                                 <div className="px-2 flex items-center lg:px-0">
                                     <div className="flex-shrink-0">
-                                        <img
-                                            className="block h-8 w-8"
-                                            src="https://gleam.run/images/lucy-charcoal-2.svg"
-                                            alt="Gleam Lucy"
-                                        />
+                                        <a href="/">
+                                            <img
+                                                className="block h-8 w-8"
+                                                src="https://gleam.run/images/lucy-charcoal-2.svg"
+                                                alt="Gleam Lucy"
+                                            />
+                                        </a>
                                     </div>
                                 </div>
                                 <div className="flex-1 px-2 flex justify-end lg:ml-6">
