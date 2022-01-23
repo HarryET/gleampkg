@@ -1,6 +1,6 @@
 import { NextApiHandler } from "next";
 import Axios, { AxiosError } from "axios";
-import { Author, GleamPackage, HexAuthor, HexPackage, HexRelease, Release } from "./types";
+import { Author, GleamPackage, HexAuthor, HexPackage, HexRelease, Release } from "@gleampkg/packages";
 import redis, { PACKAGE_TTL } from "../../../../lib/redis";
 
 const toGleamOwners = (authors: HexAuthor[]): Author[] => {
