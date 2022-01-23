@@ -46,8 +46,8 @@ const getPackageVersion: NextApiHandler = async (req, res) => {
 
     await redis.connect();
 
-    const valid = (await redis.get(`packages:valid:${name}`)) ?? "1";
-    if (valid == "0") {
+    const valid = await redis.exists(`packages:invalid:${name}`);
+    if (valid >= 1) {
         res.status(400).json({
             code: 400,
             message: "Not a Gleam package, use Hex",
@@ -62,9 +62,10 @@ const getPackageVersion: NextApiHandler = async (req, res) => {
     if (exists >= 1) {
         const pkg = await redis.json.get(`releases:${name}:${version}`);
 
+        await redis.disconnect();
+
         res.status(200).json(pkg);
 
-        await redis.disconnect();
         return;
     }
 
@@ -78,9 +79,11 @@ const getPackageVersion: NextApiHandler = async (req, res) => {
                 url: `https://hex.pm/packages/${name}`
             })
 
-            await redis.set(`packages:valid:${name}`, 0, {
+            await redis.set(`packages:invalid:${name}`, 1, {
                 EX: PACKAGE_TTL
             })
+
+            await redis.disconnect();
 
             return;
         }
@@ -92,6 +95,7 @@ const getPackageVersion: NextApiHandler = async (req, res) => {
         })
         await redis.json.set(`releases:${name}:${version}`, '$', release);
         await redis.expire(`releases:${name}:${version}`, RELEASE_TTL);
+
         await redis.disconnect();
 
         res.status(200).json(release)
