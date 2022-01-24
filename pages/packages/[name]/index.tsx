@@ -3,6 +3,7 @@ import { GetServerSideProps, NextPage } from "next";
 import Axios from "axios";
 import { GleamPackage } from "@gleampkg/packages";
 import { PackageVersion } from '@gleampkg/releases';
+import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const {
@@ -78,6 +79,9 @@ const formatDateTime = (date: Date): string => {
 const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }> = ({ pkg, latest_release }) => {
     return (
         <>
+            <Head>
+                <title>{pkg.name}</title>
+            </Head>
             <div className="min-h-full bg-gray-50">
                 <div className="bg-[#ffaff3] pb-32">
                     <nav className="bg-[#ffaff3] border-b border-[#99498d] border-opacity-25 lg:border-none">
