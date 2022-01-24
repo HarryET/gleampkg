@@ -24,6 +24,7 @@ declare module "@gleampkg/packages" {
         email: string;
         url: string;
         username: string;
+        avatar: string;
     }
 
     export type Release = {
@@ -119,6 +120,7 @@ declare module "@gleampkg/releases" {
         username: string;
         email: string;
         url: string;
+        avatar: string;
     };
 
     // Hex Types

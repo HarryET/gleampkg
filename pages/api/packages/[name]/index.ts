@@ -2,10 +2,11 @@ import { NextApiHandler } from "next";
 import Axios, { AxiosError } from "axios";
 import { Author, GleamPackage, HexAuthor, HexPackage, HexRelease, Release } from "@gleampkg/packages";
 import redis, { PACKAGE_TTL } from "../../../../lib/redis";
+import gravatar from "gravatar";
 
 const toGleamOwners = (authors: HexAuthor[]): Author[] => {
     return authors.map(author => {
-        return author as Author;
+        return {...author, avatar: gravatar.url(author.email, {s: "120"}, true)} as Author;
     }) as Author[];
 }
 const toGleamReleases = (name: string, releases: HexRelease[]): Release[] => {

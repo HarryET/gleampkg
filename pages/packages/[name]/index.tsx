@@ -94,7 +94,8 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                                         </a>
                                     </div>
                                 </div>
-                                <div className="flex-1 px-2 flex justify-end lg:ml-6">
+                                {/* TODO add search back when a full-text search implementation is done */}
+                                {/* <div className="flex-1 px-2 flex justify-end lg:ml-6">
                                     <div className="max-w-lg w-full lg:max-w-xs">
                                         <label htmlFor="search" className="sr-only">
                                             Search
@@ -112,7 +113,7 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                                             />
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </nav>
@@ -132,44 +133,49 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                     <div className="max-w-7xl mx-auto pb-12 px-4 sm:px-6 lg:px-8">
                         <div className="bg-white rounded-lg shadow px-5 py-6 sm:px-6">
                             <div className="w-full flex flex-row items-start justify-between">
-                                <div className="w-2/3">
-                                    <div className="flex flex-col">
-                                        <div className="w-full flex flex-row">
-                                            <div className="w-full min-h-[8rem]">
-                                                {/* Links */}
-                                                <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Links</h3>
-                                                <div className="flex flex-col space-y-2">
-                                                    {Object.keys(pkg.links).map((key) => <>
-                                                        <div className="flex flex-row" key={key}>
-                                                            <a className="text-[#99498d] underline font-bold" href={pkg.links[key]}>{key}</a>
-                                                        </div>
-                                                    </>)}
+                                <div className='w-full'>
+                                    <div className="w-full min-h-[8rem]">
+                                        {/* Links */}
+                                        <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Links</h3>
+                                        <div className="flex flex-col space-y-2">
+                                            {Object.keys(pkg.links).map((key, i) => <>
+                                                <div className="flex flex-row" key={`${key}-${i}`}>
+                                                    <a className="text-[#99498d] underline font-bold" href={pkg.links[key]}>{key}</a>
                                                 </div>
-                                            </div>
-                                            <div className="w-full min-h-[8rem]">
-                                                {/* Licenses */}
-                                                <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Licenses</h3>
-                                                <div className="flex flex-col space-y-2">
-                                                    {pkg.licenses.map((license) => <>
-                                                        <div className="flex flex-row" key={license}>
-                                                            <p>{license}</p>
-                                                        </div>
-                                                    </>)}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="w-full flex flex-row">
-                                            <div className="w-full min-h-[6rem]">
-                                                {/* BLANK */}
-                                            </div>
-                                            <div className="w-full min-h-[6rem]">
-                                                {/* BLANK */}
-                                            </div>
+                                            </>)}
                                         </div>
                                     </div>
+                                    <div className="w-full min-h-[6rem]">
+                                        {/* BLANK */}
+                                    </div>
                                 </div>
-                                <div className="w-1/3">
-
+                                <div className='w-full px-5'>
+                                    <div className="w-full min-h-[8rem]">
+                                        {/* Licenses */}
+                                        <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Licenses</h3>
+                                        <div className="flex flex-col space-y-2">
+                                            {pkg.licenses.map((license, i) => <>
+                                                <div className="flex flex-row" key={`${license}-${i}`}>
+                                                    <p>{license}</p>
+                                                </div>
+                                            </>)}
+                                        </div>
+                                    </div>
+                                    <div className="w-full min-h-[6rem]">
+                                        {/* BLANK */}
+                                    </div>
+                                </div>
+                                <div className="w-full">
+                                    <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Owners</h3>
+                                    {pkg.owners.map((owner, i) => (
+                                        <div className={"flex flex-row"} key={`${owner.email}-${i}`}>
+                                            <img className="rounded w-16 h-16" src={owner.avatar} />
+                                            <div className={"flex flex-col ml-2 justify-center"}>
+                                                <a href={owner.url} className="font-bold text-[#99498d]">{owner.username}</a>
+                                                <a href={`mailto:${owner.email}`} className="text-sm">{owner.email}</a>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
 
@@ -178,8 +184,8 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                                     <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Releases <span className='text-sm text-gray-400'>({pkg.releases.length})</span></h3>
                                     <div className="bg-white shadow overflow-hidden sm:rounded-md">
                                         <ul role="list" className="divide-y divide-gray-200">
-                                            {pkg.releases.map((release) => (
-                                                <li key={release.version}>
+                                            {pkg.releases.map((release, i) => (
+                                                <li key={`${release.version}-${i}`}>
                                                     <a href={release.url} className="block hover:bg-gray-50">
                                                         <div className="px-4 py-4 sm:px-6">
                                                             <div className="flex items-center justify-between">
@@ -204,8 +210,8 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                                     <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Dependencies <span className='text-sm text-gray-400'>({latest_release.requirements.length})</span></h3>
                                     <div className="bg-white shadow overflow-hidden sm:rounded-md">
                                         <ul role="list" className="divide-y divide-gray-200">
-                                            {latest_release.requirements.map((dependency) => (
-                                                <li key={dependency.name}>
+                                            {latest_release.requirements.map((dependency, i) => (
+                                                <li key={`${dependency.name}-${i}`}>
                                                     <a href={dependency.url} className="block hover:bg-gray-50">
                                                         <div className="px-4 py-4 sm:px-6">
                                                             <div className="flex items-center justify-between">

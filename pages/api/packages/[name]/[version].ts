@@ -2,6 +2,7 @@ import Axios, { AxiosError } from "axios";
 import { NextApiHandler } from "next";
 import redis, { PACKAGE_TTL, RELEASE_TTL } from "../../../../lib/redis";
 import { HexPackageVersion, HexRequirement, PackageVersion, Publisher, Requirement } from "@gleampkg/releases";
+import gravatar from "gravatar";
 
 const toGleamRequirements = (reqs: { [key: string]: HexRequirement }): Requirement[] => {
     const requirements: Requirement[] = [];
@@ -19,6 +20,9 @@ const toGleamRequirements = (reqs: { [key: string]: HexRequirement }): Requireme
 }
 
 const toGleamRelease = (name: string, pkg: HexPackageVersion): PackageVersion => {
+    const publisher: Publisher = {...pkg.publisher, avatar: gravatar.url(pkg.publisher.email, {s: "120"}, true)};
+    console.log(publisher);
+
     return {
         version: pkg.version,
         has_docs: pkg.has_docs,
@@ -28,7 +32,7 @@ const toGleamRelease = (name: string, pkg: HexPackageVersion): PackageVersion =>
         updated_at: pkg.updated_at,
         inserted_at: pkg.inserted_at,
         requirements: toGleamRequirements(pkg.requirements),
-        publisher: pkg.publisher as Publisher,
+        publisher: publisher,
         installs: {
             gleam: `${name} = "~> ${pkg.version}"`,
             hex: `{:${name}, "~> ${pkg.version}"}`
