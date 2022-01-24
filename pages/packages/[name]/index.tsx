@@ -172,7 +172,7 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                                             <img className="rounded w-16 h-16" src={owner.avatar} />
                                             <div className={"flex flex-col ml-2 justify-center"}>
                                                 <a href={owner.url} className="font-bold text-[#99498d] hover:underline">{owner.username}</a>
-                                                <a href={`mailto:${owner.email}`} className="text-sm hover:underline">{owner.email}</a>
+                                                {/* <a href={`mailto:${owner.email}`} className="text-sm hover:underline">{owner.email}</a> */}
                                             </div>
                                         </div>
                                     ))}
