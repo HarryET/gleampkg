@@ -78,7 +78,7 @@ const formatDateTime = (date: Date): string => {
 const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }> = ({ pkg, latest_release }) => {
     return (
         <>
-            <div className="min-h-full">
+            <div className="min-h-full bg-gray-50">
                 <div className="bg-[#ffaff3] pb-32">
                     <nav className="bg-[#ffaff3] border-b border-[#99498d] border-opacity-25 lg:border-none">
                         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
@@ -171,8 +171,8 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                                         <div className={"flex flex-row"} key={`${owner.email}-${i}`}>
                                             <img className="rounded w-16 h-16" src={owner.avatar} />
                                             <div className={"flex flex-col ml-2 justify-center"}>
-                                                <a href={owner.url} className="font-bold text-[#99498d]">{owner.username}</a>
-                                                <a href={`mailto:${owner.email}`} className="text-sm">{owner.email}</a>
+                                                <a href={owner.url} className="font-bold text-[#99498d] hover:underline">{owner.username}</a>
+                                                <a href={`mailto:${owner.email}`} className="text-sm hover:underline">{owner.email}</a>
                                             </div>
                                         </div>
                                     ))}
@@ -253,15 +253,16 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                     </div>
                 </main>
 
-                {/* <footer className="w-full h-full bg-[#ffaff3] text-gray-800 py-6 flex flex-col justify-center items-center font-bold">
-                    <div className="flex flex-row justify-center items-center">
-                        Made with
-                        <img src="/heart.svg" className="w-4 h-4 mx-1" />
-                        by
-                        <a className="text-[#99498d] underline ml-1" href='https://harryet.xyz'>Harry Bairstow</a>
-                    </div>
-                </footer> */}
             </div>
+
+            <footer className="w-full h-min bg-[#ffaff3] text-gray-800 py-6 flex flex-col justify-center items-center font-bold">
+                <div className="flex flex-row justify-center items-center">
+                    Made with
+                    <img src="/heart.svg" className="w-4 h-4 mx-1" />
+                    by
+                    <a className="text-[#99498d] ml-1 hover:underline" href='https://harryet.xyz'>Harry Bairstow</a>
+                </div>
+            </footer>
         </>
     )
 }
