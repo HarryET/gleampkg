@@ -166,20 +166,31 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                                         </div>
                                     </div>
                                     <div className="w-full min-h-[6rem]">
-                                        {/* BLANK */}
+                                        {/* Downloads */}
+                                        <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Downloads</h3>
+                                        <div className="flex flex-col space-y-2">
+                                            Latest version: {latest_release.downloads}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="w-full">
                                     <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Owners</h3>
                                     {pkg.owners.map((owner, i) => (
-                                        <div className={"flex flex-row"} key={`${owner.email}-${i}`}>
-                                            <img className="rounded w-16 h-16" src={owner.avatar} />
+                                        <div className={"flex flex-row"} key={`${owner.username}-${i}`}>
+                                            <img className="rounded w-14 h-14" src={owner.avatar} />
                                             <div className={"flex flex-col ml-2 justify-center"}>
                                                 <a href={owner.url} className="font-bold text-[#99498d] hover:underline">{owner.username}</a>
                                                 {/* <a href={`mailto:${owner.email}`} className="text-sm hover:underline">{owner.email}</a> */}
                                             </div>
                                         </div>
                                     ))}
+                                    <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2 mt-2">Publisher</h3>
+                                    <div className={"flex flex-row"}>
+                                        <img className="rounded w-14 h-14" src={latest_release.publisher.avatar} />
+                                        <div className={"flex flex-col ml-2 justify-center"}>
+                                            <a href={latest_release.publisher.url} className="font-bold text-[#99498d] hover:underline">{latest_release.publisher.username}</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -212,7 +223,8 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                                 </div>
                                 <div className="w-full px-5">
                                     <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Dependencies <span className='text-sm text-gray-400'>({latest_release.requirements.length})</span></h3>
-                                    <div className="bg-white shadow overflow-hidden sm:rounded-md">
+                                    {latest_release.requirements.length <= 0 && <p>No dependencies.</p>}
+                                    {latest_release.requirements.length >= 1 && <div className="bg-white shadow overflow-hidden sm:rounded-md">
                                         <ul role="list" className="divide-y divide-gray-200">
                                             {latest_release.requirements.map((dependency, i) => (
                                                 <li key={`${dependency.name}-${i}`}>
@@ -231,7 +243,7 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                                                 </li>
                                             ))}
                                         </ul>
-                                    </div>
+                                    </div>}
                                 </div>
                                 <div className="w-full">
                                     <h3 className="text-xl leading-6 font-medium text-gray-900 mb-2">Configs</h3>
@@ -244,10 +256,10 @@ const packageUI: NextPage<{ pkg: GleamPackage, latest_release: PackageVersion }>
                                         </div>
                                     </div>
                                     <div className="w-full">
-                                        <p className="text-md text-gray-700 mb-1">Hex</p>
+                                        <p className="text-md text-gray-700 mb-1">Mix</p>
                                         <div className="w-full bg-gray-200 rounded p-2">
                                             <code>
-                                                {pkg.installs.hex}
+                                                {pkg.installs.mix}
                                             </code>
                                         </div>
                                     </div>

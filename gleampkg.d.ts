@@ -3,7 +3,7 @@ declare module "@gleampkg/packages" {
     export type GleamPackage = {
         installs: {
             gleam: string;
-            hex: string;
+            mix: string;
         }
         latest_stable_version: string;
         latest_version: string;
@@ -105,7 +105,7 @@ declare module "@gleampkg/releases" {
         publisher: Publisher;
         installs: {
             gleam: string;
-            hex: string;
+            mix: string;
         }
     };
 
