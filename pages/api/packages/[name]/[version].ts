@@ -35,7 +35,7 @@ const toGleamRelease = (name: string, pkg: HexPackageVersion): PackageVersion =>
         publisher: publisher,
         installs: {
             gleam: `${name} = "~> ${pkg.version}"`,
-            hex: `{:${name}, "~> ${pkg.version}"}`
+            mix: `{:${name}, "~> ${pkg.version}"}`
         }
     };
 }

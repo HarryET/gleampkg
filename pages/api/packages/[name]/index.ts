@@ -31,7 +31,7 @@ const toGleamPackage = (pkg: HexPackage): GleamPackage => {
         latest_version: pkg.latest_version,
         installs: {
             gleam: `${pkg.name} = "~> ${pkg.latest_stable_version}"`,
-            hex: `{:${pkg.name}, "~> ${pkg.latest_stable_version}"}`
+            mix: `{:${pkg.name}, "~> ${pkg.latest_stable_version}"}`
         },
         owners: toGleamOwners(pkg.owners),
         releases: toGleamReleases(pkg.name, pkg.releases)
